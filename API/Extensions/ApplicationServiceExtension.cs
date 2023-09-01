@@ -1,11 +1,19 @@
 ﻿using System;
+using Core.Interfaces;
+using Infrastructure.Data;
+
 namespace API.Extensions
 {
-	public class ApplicationServiceExtension
+	public static class ApplicationServiceExtension
 	{
-		public ApplicationServiceExtension()
-		{
-		}
-	}
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services,
+                IConfiguration config)
+        {
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+            return services;
+        }
+
+    }
 }
 

@@ -1,3 +1,4 @@
+using API.Extensions;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<StoreContext>(x =>
                 x.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddApplicationServices(configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
