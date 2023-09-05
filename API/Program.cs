@@ -1,6 +1,8 @@
 using API.Extensions;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +12,17 @@ var configuration = builder.Configuration;
 
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<StoreContext>(x =>
-                x.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddControllers(options =>
+{
+    // Add support for both JSON and XML output
+    options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+    options.FormatterMappings.SetMediaTypeMappingForFormat("xml", MediaTypeHeaderValue.Parse("application/xml"));
+})
+    .AddXmlSerializerFormatters() // Enable XML serialization
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = null; // Configure JSON options
+    });
 
 builder.Services.AddApplicationServices(configuration);
 
@@ -33,5 +44,13 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+
+var context = services.GetRequiredService<StoreContext>();
+await context.Database.MigrateAsync();
+await StoreContextSeed.SeedAsync(context, loggerFactory);
 
 app.Run();

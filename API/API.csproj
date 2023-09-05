@@ -29,11 +29,11 @@
   <ItemGroup>
     <None Remove="Extensions\" />
     <None Remove="Dto\" />
-    <None Remove="Helpers\" />
+    <None Remove="MappingProfiles\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Extensions\" />
     <Folder Include="Dto\" />
-    <Folder Include="Helpers\" />
+    <Folder Include="MappingProfiles\" />
   </ItemGroup>
 </Project>

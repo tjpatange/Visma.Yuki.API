@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Dto;
+using API.Extensions;
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
@@ -25,9 +26,9 @@ namespace API.Controllers
         }
 
         [HttpGet()]
+        [TypeFilter(typeof(ResponseFormatFilter))]
         public async Task<ActionResult<IReadOnlyList<AuthorToListDto>>> GetAllAuthors()
         {
-            var spec = new AuthorSpecification();
             var authors = await _unitOfWork.Repository<Author>().GetAllAsync();
             var authorsFromMapper = _mapper.Map<IReadOnlyList<AuthorToListDto>>(authors);
             return Ok(authorsFromMapper);
@@ -35,6 +36,7 @@ namespace API.Controllers
 
 
         [HttpGet("{id}")]
+        [TypeFilter(typeof(ResponseFormatFilter))]
         public async Task<ActionResult<AuthorToListDto>> GetPostById(int id)
         {
             var spec = new AuthorSpecification(id);
@@ -47,7 +49,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult> SaveAuthor(AuthorToAddDto saveDto)
         {
-            var spec = new AuthorSpecification(saveDto.SurName, saveDto.SurName);
+            var spec = new AuthorSpecification(saveDto.Name, saveDto.SurName);
             var existingAuthor = await _unitOfWork.Repository<Author>().GetEntityWithSpec(spec);
             if (existingAuthor != null)
                 return BadRequest("Already exists");

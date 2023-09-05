@@ -39,7 +39,7 @@ namespace API.Controllers
         {
             var authorSpec = new AuthorSpecification(saveDto.AuthorId);
             var existingAuthor = await _unitOfWork.Repository<Author>().GetEntityWithSpec(authorSpec);
-            if (existingAuthor != null)
+            if (existingAuthor == null)
                 return BadRequest("You are trying to add post with an non-existing Author!!");
 
             var spec = new PostSpecification(saveDto.Title, saveDto.Description, saveDto.AuthorId);

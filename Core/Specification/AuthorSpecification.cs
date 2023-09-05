@@ -14,6 +14,7 @@ namespace Core.Specification
             (string.IsNullOrEmpty(surname) || x.SurName == surname))
         {
         }
+        
         public AuthorSpecification(): base()
 		{
 		}
