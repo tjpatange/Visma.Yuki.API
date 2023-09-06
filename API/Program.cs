@@ -10,8 +10,6 @@ var configuration = builder.Configuration;
 
 // Add services to the container.
 
-builder.Services.AddControllers();
-
 builder.Services.AddControllers(options =>
 {
     // Add support for both JSON and XML output
