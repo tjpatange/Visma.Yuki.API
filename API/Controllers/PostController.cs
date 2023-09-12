@@ -37,8 +37,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult> SavePost(PostToAddDto saveDto)
         {
-            var authorSpec = new AuthorSpecification(saveDto.AuthorId);
-            var existingAuthor = await _unitOfWork.Repository<Author>().GetEntityWithSpec(authorSpec);
+            var existingAuthor = await _unitOfWork.Repository<Author>().GetByIdAsync(saveDto.AuthorId);
             if (existingAuthor == null)
                 return BadRequest("You are trying to add post with an non-existing Author!!");
 
