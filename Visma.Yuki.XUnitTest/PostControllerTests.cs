@@ -51,10 +51,9 @@ namespace Visma.Yuki.XUnitTest
 
             var saveDto = new PostToAddDto();
             var authorId = 1;
-            var authorSpec = new AuthorSpecification(authorId);
             var postSpec = new PostSpecification(saveDto.Title, saveDto.Description, authorId);
 
-            _fixture.UnitOfWork.Setup(u => u.Repository<Author>().GetEntityWithSpec(authorSpec))
+            _fixture.UnitOfWork.Setup(u => u.Repository<Author>().GetByIdAsync(authorId))
                 .ReturnsAsync((Author)null);
 
             _fixture.UnitOfWork.Setup(u => u.Repository<Post>().GetEntityWithSpec(postSpec))
